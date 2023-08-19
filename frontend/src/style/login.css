@@ -1,0 +1,95 @@
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: "Source Sans Pro", sans-serif;
+  background-color: #f4f4f4;
+}
+.logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+.login-box {
+  background-color: #fff;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.input-group input {
+    width: 100%;
+    box-sizing: border-box; /* Đảm bảo rằng padding và border được tính trong chiều rộng */
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 5px;
+    outline: none; /* Tắt đường viền mặc định khi focus */
+  }
+
+
+.login-box h1 {
+  text-align: center;
+}
+.input-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+
+
+.input-group input:focus {
+  border: 1px solid red; /* Tăng độ dày của border khi focus */
+}
+
+.toggle-password {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  padding: 10px; /* Thêm padding để tạo khoảng cách */
+  cursor: pointer;
+}
+.toggle-password img {
+  width: 20px;
+  height: 20px;
+  position: absolute; 
+  right: 10px; /* Đặt ảnh con mắt cách lề phải 10px */
+  top: 50%; /* Đặt ảnh con mắt ở giữa theo chiều dọc */
+  transform: translateY(-50%); /* Điều chỉnh vị trí để ảnh con mắt nằm chính giữa */
+}
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-top: -20px; /* Điều chỉnh khoảng cách từ ô input password */
+    margin-bottom: 20px;
+  }
+.remember-me input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.sign-in-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.go-home-link {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  text-decoration: none; /* Loại bỏ gạch chân */
+  color: #007bff;
+  font-size: 16px; /* Kích thước văn bản, bạn có thể thay đổi */
+}

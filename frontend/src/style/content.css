@@ -1,0 +1,185 @@
+
+.background {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 900px;
+  background-position: 100% 100%;
+  background-size: 28%;
+  color: #333333;
+  line-height: 25.6px;
+  padding: 100px 0;
+  background-color: #fff;
+  box-sizing: border-box;
+  font-family: 'Merriweather',serif;
+} 
+ .backgroundimage {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.5;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+} 
+.elementor-container {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.elementor {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.product_intro {
+  flex: 1;
+  background-size: contain; /* Làm cho ảnh nền vừa vặn mà không cắt xén */
+  background-position: center; /* Căn giữa ảnh nền */
+  background-repeat: no-repeat; /* Không lặp lại ảnh nền */
+  height: 400px; /* Chiều cao cố định */
+  width: auto; /* Chiều rộng tự động dựa trên tỷ lệ khung hình của ảnh */
+}
+
+.information {
+  flex: 1;
+  padding: 40px;
+  text-align: left;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.shop-now-button {
+  background-color: chocolate;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.shop-now-button .new-cart-icon {
+  margin-right: 5px; /* Khoảng cách giữa biểu tượng và văn bản */
+}
+.background3,
+.background2 {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background-color: #f2f2f2;
+  box-sizing: border-box;
+}
+.list_new_products,
+.best-selling-products {
+  padding: 50px 0;
+  margin-top: 0px;
+  position: relative;
+
+}
+.scroll-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 350px;
+  margin-right: 350px;
+}
+.new_products,
+.listproductsselling {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 15px;
+  flex-grow: 1;
+}
+.new_product,
+.productselling {
+  display: inline-block;
+  width: 15%;
+  height: 100%;
+  border: 1px solid #ddd;
+  margin: 5px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.list_new_products h2,
+.best-selling-products h2 {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin: 20px 0;
+}
+.new_product a,
+.productselling a {
+  text-decoration: none;
+  color: #333;
+}
+.new_product img,
+.productselling img {
+  max-width: 100%;
+  height: auto;
+}
+.new_product h3,
+.productselling h3 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+.new_product p,
+.productselling p {
+  font-size: 16px;
+  color: #666;
+}
+.new_product span,
+.productselling span {
+  font-size: 18px;
+  font-weight: bold;
+}
+.new_product:hover,
+.productselling:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-button {
+  display: flex;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  background-color: azure;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 100%;
+}
+.scroll-button.left {
+  left: 0px;
+}
+
+.scroll-button.right {
+  right: 0px;
+}
+
+
+
+

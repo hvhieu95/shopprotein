@@ -1,0 +1,60 @@
+.cart-dropdown {
+  display: none; /* Ẩn giỏ hàng theo mặc định */
+  position: absolute;
+  right: 0px;
+  width: 35%;
+  height: 100vh;
+  background-color:	#f8f8ff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-left: 1px solid #dcdcdc;
+  flex-direction: column;
+  z-index: 1000;
+}
+.cart-dropdown.visible {
+  display: block; /* Hiển thị giỏ hàng khi có class 'visible' */
+}
+.cart-header,
+.cart-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #dcdcdc;
+  height: 10%;
+  text-align: center;
+}
+.cart-content {
+  height: 80%;
+}
+
+.cart-footer button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid 	#f08080;
+  background-color: indianred;
+  cursor: pointer;
+}
+.close-cart {
+  display: flex;
+  position: absolute;
+  right: 10px;
+margin-top: 25px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: black;
+}
+.cart-overlay {
+  position: fixed;
+  display: none;/* Ẩn lớp phủ theo mặc định */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.cart-overlay.visible {
+  display: flex; /* Hiển thị lớp phủ khi có class 'visible' */
+}
