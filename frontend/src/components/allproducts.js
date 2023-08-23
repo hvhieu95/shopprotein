@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "../style/allproducts.css";
 import ProductsData from "../data/MOCK_DATA.json";
 export function AllProducts() {
-  const products = ProductsData;
   // hàm tạo việc phân trang cho sản phẩm
+  const products = ProductsData;
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -12,9 +12,47 @@ export function AllProducts() {
     indexOfFirstProduct,
     indexOfLastProduct
   );
+
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
     pageNumbers.push(i);
+  }
+  const nextPage = () => {
+    if (currentPage < pageNumbers.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // tạo hàm để kiểm tra  trạng thái hiển thị của sản phẩm là dạng grid hay list
+  const [viewMode, setViewMode] = useState("grid");
+  // hàm hiển thị sản phẩm theo giá
+  const [sortOption, setSortOption] = useState("");
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
+  const sortedProducts = [...currentProducts];
+  switch (sortOption) {
+    case "price-asc":
+      sortedProducts.sort(
+        (a, b) => parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1))
+      );
+      break;
+    case "price-desc":
+      sortedProducts.sort(
+        (a, b) => parseFloat(b.price.slice(1)) - parseFloat(a.price.slice(1))
+      );
+      break;
+    case "rating":
+      sortedProducts.sort((a, b) => b.rating.length - a.rating.length);
+      break;
+      default:
+        console.warn("Invalid sort option:", sortOption);
+        break;
   }
 
   return (
@@ -79,37 +117,55 @@ export function AllProducts() {
           </div>
 
           <div className="sort-view-section">
-            <select>
+            <select onChange={handleSortChange}>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
               <option value="rating">Rating</option>
               <option value="newest">Newest</option>
             </select>
             <div className="view-options">
-              <button className="list-view">List</button>
-              <button className="grid-view">Grid</button>
+              <button className="list-view" onClick={() => setViewMode("list")}>
+                List
+              </button>
+              <button className="grid-view" onClick={() => setViewMode("grid")}>
+                Grid
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="product-grid">
-          {currentProducts.map((product) => (
-            <div key={product.id} className="product-item">
-              <img src={product.image} alt={product.name} />
-              <h3>{product.name}</h3>
-              <span className="product-price">{product.price}</span>
-              <div className="product-rating">{product.rating}</div>
-              <button>Add to Cart</button>
-            </div>
-          ))}
+        <div className={`product-container ${viewMode}`}>
+          {currentProducts.map((product) =>
+            viewMode === "grid" ? (
+              <div key={product.id} className="product-grid">
+                <img src={product.image} alt={product.name} />
+                <h3>{product.name}</h3>
+                <span className="product-price">{product.price}</span>
+                <div className="product-rating">{product.rating}</div>
+                <button>Add to Cart</button>
+              </div>
+            ) : (
+              <div key={product.id} className="product-list">
+                <img src={product.image} alt={product.name} />
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <span className="product-price">{product.price}</span>
+                  <div className="product-rating">{product.rating}</div>
+                </div>
+                <button>Add to Cart</button>
+              </div>
+            )
+          )}
         </div>
+
         <div className="pagination">
+          <button onClick={prevPage}>&lt;</button>
           {pageNumbers.map((number) => (
-            <button
-              key={number}
-              onClick={() => setCurrentPage(number)}
-            ></button>
+            <button key={number} onClick={() => setCurrentPage(number)}>
+              {number}
+            </button>
           ))}
+          <button onClick={nextPage}>&gt;</button>
         </div>
       </div>
     </div>
