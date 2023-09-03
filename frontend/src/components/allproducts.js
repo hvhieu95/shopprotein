@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import "../style/allproducts.css";
 import ProductsData from "../data/MOCK_DATA.json";
 
@@ -86,20 +86,21 @@ export function AllProducts() {
     return filtered;
   };
 
-  // hàm xử lý khi người dùng muốn  tìm kiếm sản phẩm
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-  // lọc sản phẩm theo tìm kiếm
-  const getFilteredProductsByName = () => {
-    if (!searchTerm) return products;
+  
+ // hàm xử lý khi người dùng thay đổi giá tối thiểu
 
-    return products.filter((product) =>
-      // chuyển tên sp thành chữ thường và  từkhóa nhập vào là chữ thường. kiểm tra xem tên của sp có chứa từ khóa tìm kiếm không
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  };
-  const displayedProducts = getFilteredProductsByName();
+ const handleMinPriceChange = (e) => {
+  setMinPrice(e.target.value);
+};
+
+// hàm xử lý khi người dùng thay đổi giá tối đa
+const handleMaxPriceChange = (e) => {
+  setMaxPrice(e.target.value);
+};
+// hàm xử lý bộ lọc giá
+const applyPriceChange = () => {
+  setSelectedPriceRange([`${minPrice}-${maxPrice}`]);
+};
 
   // Hàm xử lý khi người dùng thay đổi khoảng giá sản phẩm
   const handlePriceChange = (e) => {
@@ -116,21 +117,7 @@ export function AllProducts() {
       );
     }
   };
-  // hàm xử lý khi người dùng thay đổi giá tối thiểu
-
-  const handleMinPriceChange = (e) => {
-    setMinPrice(e.target.value);
-  };
-
-  // hàm xử lý khi người dùng thay đổi giá tối đa
-  const handleMaxPriceChange = (e) => {
-    setMaxPrice(e.target.value);
-  };
-  // hàm xử lý bộ lọc giá
-  const applyPriceChange = () => {
-    setSelectedPriceRange([`${minPrice}-${maxPrice}`]);
-  };
-
+ 
   // Hàm xử lý khi người dùng thay đổi danh mục sản phẩm
   const handleCategoryChange = (e) => {
     const value = e.target.value;
@@ -144,7 +131,20 @@ export function AllProducts() {
       );
     }
   };
+// hàm xử lý khi người dùng muốn  tìm kiếm sản phẩm
+const handleSearchChange = (e) => {
+  setSearchTerm(e.target.value);
+};
+// lọc sản phẩm theo tìm kiếm
+const getFilteredProductsByName = () => {
+  if (!searchTerm) return products;
 
+  return products.filter((product) =>
+    // chuyển tên sp thành chữ thường và  từ khóa nhập vào là chữ thường. kiểm tra xem tên của sp có chứa từ khóa tìm kiếm không
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+};
+const displayedProducts = getFilteredProductsByName();
   // Hàm xử lý khi người dùng thay đổi cách sắp xếp sản phẩm
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
@@ -172,7 +172,6 @@ export function AllProducts() {
   return (
     <div className="container-all-products">
       <div className="sidebar">
-       
         <div className="view-by-price">
           <h3>View by Price</h3>
           <div className="price-inputs">
