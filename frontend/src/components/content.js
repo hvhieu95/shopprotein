@@ -9,9 +9,10 @@ import Whey2 from "../image/whey2.png";
 import Whey3 from "../image/whey3.png";
 import Omega2 from "../image/omega2.png";
 import PreWorkOut1 from "../image/preworkout1.png";
-import PreWorkOut2 from "../image/preworkout2.png"; 
+import PreWorkOut2 from "../image/preworkout2.png";
 import PreWorkOut3 from "../image/preworkout3.png";
 import "../style/content.css";
+import { Link } from "react-router-dom";
 
 export function MainContent() {
   const scrollProducts = (value) => {
@@ -45,9 +46,9 @@ export function MainContent() {
                 just starting your fitness journey, our protein supplements are
                 the perfect choice for you.
               </p>
-              <a href="#" className="shop-now-button">
+              <Link to="/allproducts"className="shop-now-button">
                 <span className="new-cart-icon">👜</span> START SHOPPING
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -174,7 +175,7 @@ export function MainContent() {
                 <a href="#">
                   <img src={PreWorkOut3} alt="preworkout3" />
                   <h3>Supplements</h3>
-                  <p> Pre-Workout  Blue Raspberry</p>
+                  <p> Pre-Workout Blue Raspberry</p>
                   <span>£25.00</span>
                   <div className="product-rating">★★★★★</div>
                 </a>
