@@ -28,40 +28,34 @@ export function AllProducts() {
   // state cho trạng thái lưu giữ giá tối thiểu và tối đa
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  // Sắp xếp toàn bộ danh sách sản phẩm
+
+  
+  // Hàm chuyển đổi giá từ chuỗi sang số
+  const parsePrice = (price) => parseFloat(price.replace(/[^0-9.]/g, ""));
+
+// Hàm sắp xếp sản phẩm
   const getSortedProducts = () => {
     let sorted = [...products];
     switch (sortOption) {
       case "price-asc":
-        // Sắp xếp sản phẩm theo giá từ thấp đến cao
-        sorted.sort(
-          (a, b) =>
-            parseFloat(a.price.replace(/[^0-9.]/g, "")) -
-            parseFloat(b.price.replace(/[^0-9.]/g, ""))
-        );
+        sorted.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
         break;
       case "price-desc":
-        // Sắp xếp sản phẩm theo giá từ cao xuống thấp
-        sorted.sort(
-          (a, b) =>
-            parseFloat(b.price.replace(/[^0-9.]/g, "")) -
-            parseFloat(a.price.replace(/[^0-9.]/g, ""))
-        );
+        sorted.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
         break;
       case "rating":
-        // Sắp xếp sản phẩm theo đánh giá
         sorted.sort((a, b) => b.rating.length - a.rating.length);
         break;
       default:
-        console.warn(`Invalid sort option: ${sortOption}`);
-        break;
+        console.warn(`Tùy chọn sắp xếp không hợp lệ: ${sortOption}`);
     }
     return sorted;
   };
 
-// Lọc sản phẩm dựa trên tất cả các tiêu chí đã chọn
-const getFilteredProducts = () => {
-  let filtered = getSortedProducts();
+  // Hàm lọc sản phẩm dựa trên các tiêu chí đã chọn
+  const getFilteredProducts = () => {
+    let filtered = getSortedProducts();
+
     // Lọc sản phẩm dựa trên tên
     if (searchTerm) {
       filtered = filtered.filter((product) =>
@@ -69,108 +63,92 @@ const getFilteredProducts = () => {
       );
     }
 
-  // Lọc sản phẩm dựa trên giá đã chọn
-  if (selectedPriceRange.length > 0) {
-    filtered = filtered.filter((product) => {
-      const productPrice = parseFloat(product.price.replace(/[^0-9.]/g, ""));
-      return selectedPriceRange.some((range) => {
-        const [min, max] = range.split("-").map(Number);
-        return productPrice >= min && productPrice <= max;
+    // Lọc sản phẩm dựa trên khoảng giá đã chọn
+    if (selectedPriceRange.length > 0) {
+      filtered = filtered.filter((product) => {
+        const productPrice = parsePrice(product.price);
+        return selectedPriceRange.some((range) => {
+          const [min, max] = range.split("-").map(Number);
+          return productPrice >= min && productPrice <= max;
+        });
       });
-    });
-  }
-  // Lọc sản phẩm dựa trên danh mục đã chọn
-  if (selectedCategories.length > 0) {
-    filtered = filtered.filter((product) =>
-      selectedCategories.includes(product.category)
-    );
-  }
+    }
 
-  return filtered;
-};
-// Lấy danh sách sản phẩm cho trang hiện tại sau khi đã lọc và sắp xếp
-const getCurrentProducts = () => {
-  const filteredProducts = getFilteredProducts();
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-};
+    // Lọc sản phẩm dựa trên danh mục đã chọn
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((product) =>
+        selectedCategories.includes(product.category)
+      );
+    }
 
-  // hàm xử lý khi người dùng thay đổi giá tối thiểu
-
-  const handleMinPriceChange = (e) => {
-    setMinPrice(e.target.value);
+    return filtered;
   };
+  // Hàm lấy sản phẩm cho trang hiện tại
+  const getCurrentProducts = () => {
+    const filteredProducts = getFilteredProducts();
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  };
+// Các hàm xử lý sự kiện
+const handleMinPriceChange = (e) => setMinPrice(e.target.value);
+const handleMaxPriceChange = (e) => setMaxPrice(e.target.value);
+const applyPriceChange = () => setSelectedPriceRange([`${minPrice}-${maxPrice}`]);
+const handleSearchChange = (e) => setSearchTerm(e.target.value);
+const handleSortChange = (e) => setSortOption(e.target.value);
+
+const handlePriceChange = (e) => {
+  const { value, checked } = e.target;
+  setSelectedPriceRange((prevRanges) =>
+    checked ? [...prevRanges, value] : prevRanges.filter((range) => range !== value)
+  );
+};
+
+const handleCategoryChange = (e) => {
+  const { value, checked } = e.target;
+  setSelectedCategories((prevCategories) =>
+    checked ? [...prevCategories, value] : prevCategories.filter((category) => category !== value)
+  );
+};
+
+const displayedProducts = getCurrentProducts();
+// Tính toán số trang
+
+const pageNumbers = Array.from({ length: Math.ceil(getFilteredProducts().length / productsPerPage) }, (_, i) => i + 1);
+
+const nextPage = () => {
+  if (currentPage < pageNumbers.length) setCurrentPage(currentPage + 1);
+};
+
+const prevPage = () => {
+  if (currentPage > 1) setCurrentPage(currentPage - 1);
+};
+
+
 
   // hàm xử lý khi người dùng thay đổi giá tối đa
-  const handleMaxPriceChange = (e) => {
-    setMaxPrice(e.target.value);
-  };
+  
   // hàm xử lý bộ lọc giá
-  const applyPriceChange = () => {
-    setSelectedPriceRange([`${minPrice}-${maxPrice}`]);
-  };
-// Hàm xử lý khi người dùng nhập vào ô tìm kiếm
-const handleSearchChange = (e) => {
-  setSearchTerm(e.target.value);
-};
-
-  // Hàm xử lý khi người dùng thay đổi khoảng giá sản phẩm
-  const handlePriceChange = (e) => {
-    const value = e.target.value; // lấy giá trị của checkbox
-    const isChecked = e.target.checked; // kiểm tra xem checkbox có đang được chọn hay không
-    // nếu checkbox được chọn thì khoảng giá sẽ được thêm vào mảng
-    if (isChecked) {
-      setSelectedPriceRange((prevRanges) => [...prevRanges, value]);
-    }
-    //loại bỏ khoảng giá khỏi mảng khi checkbox bị bỏ chọn
-    else {
-      setSelectedPriceRange((prevRanges) =>
-        prevRanges.filter((range) => range !== value)
-      );
-    }
-  };
-
-  // Hàm xử lý khi người dùng thay đổi danh mục sản phẩm
-  const handleCategoryChange = (e) => {
-    const value = e.target.value;
-    const isChecked = e.target.checked;
-
-    if (isChecked) {
-      setSelectedCategories((prevCategories) => [...prevCategories, value]);
-    } else {
-      setSelectedCategories((prevCategories) =>
-        prevCategories.filter((category) => category !== value)
-      );
-    }
-  };
  
 
-  const displayedProducts = getCurrentProducts();
+  
+// Hàm xử lý khi người dùng nhập vào ô tìm kiếm
+
+
+
+  // Hàm xử lý khi người dùng thay đổi khoảng giá sản phẩm
+
+
+  // Hàm xử lý khi người dùng thay đổi danh mục sản phẩm
+
+ 
+
+ 
 
   // Hàm xử lý khi người dùng thay đổi cách sắp xếp sản phẩm
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-  };
-// Tính số trang dựa trên số sản phẩm sau khi đã lọc
-const pageNumbers = [];
-for (let i = 1; i <= Math.ceil(getFilteredProducts().length / productsPerPage); i++) {
-  pageNumbers.push(i);
-}
+  
+ 
 
-  // Chuyển đến trang tiếp theo
-  const nextPage = () => {
-    if (currentPage < pageNumbers.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  // Quay lại trang trước
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <div className="container-all-products">
