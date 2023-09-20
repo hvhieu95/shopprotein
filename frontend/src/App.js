@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Header } from "./components/header";
 import { MainContent } from "./components/content";
@@ -8,6 +8,9 @@ import { ForgotPassword } from "./components/ForgotPassword";
 import { Register } from "./components/Register";
 import { AllProducts } from "./components/allproducts";
 function App() {
+  // state cho giỏ hàng
+  const [cart, setCart] = useState([]);
+
   return (
     <Router>
       <Routes>
@@ -32,7 +35,8 @@ function App() {
           path="/"
           element={
             <>
-              <Header />
+              {/* truyền cart và setcart dưới dạng props đến header */}
+              <Header cart={cart} setCart={setCart} />
               <MainContent />
               <Footer />
             </>
@@ -42,8 +46,9 @@ function App() {
           path="/allproducts"
           element={
             <>
-              <Header />
-              <AllProducts />
+              {/* truyền cart và setCart dưới dạng props đến header và allproducts */}
+              <Header cart={cart} setCart={setCart} />
+              <AllProducts cart={cart} setCart={setCart} />
               <Footer />
             </>
           }

@@ -4,7 +4,7 @@ import { CartDropDown } from "./CartDropdown";
 import { Link } from "react-router-dom";
 import "../style/header.css";
 
-export function Header() {
+export function Header({ cart, setCart }) {
   // State để kiểm tra xem giỏ hàng có đang hiển thị hay không
   const [cartVisible, setCartVisible] = useState(false);
   // Hàm để chuyển đổi trạng thái hiển thị của giỏ hàng
@@ -28,14 +28,28 @@ export function Header() {
       setCartVisible(false);
     }
   };
+
+  // hàm tính tổng giá tiền ở giỏ hàng
+  const getTotalPrice = () => {
+    const total = cart.reduce((acc, product) => {
+      const price = Number(product.price.replace("$", "")).toFixed(1);
+      return acc + price * product.quantity;
+    }, 0);
+    return total.toFixed(2);
+  };
+  // hàm tính tổng số lượng sản phẩm trong giỏ hàng
+  const getTotalQuantify = () => {
+    return cart.reduce((acc, product) => acc + product.quantity, 0);
+  };
+
   return (
     <div className="main-header">
       <div className="container1">
-      <div className="logo">
-    <Link to="/">
-        <img src={Logo} alt="logo" />
-    </Link>
-</div>
+        <div className="logo">
+          <Link to="/">
+            <img src={Logo} alt="logo" />
+          </Link>
+        </div>
         <nav className="nav">
           <ul>
             <li>
@@ -65,12 +79,20 @@ export function Header() {
           </ul>
         </nav>
         <div className="cart-container" onClick={toggleCart}>
-          <span className="price-amount">$0.00</span>
+          <span className="price-amount">${getTotalPrice()}</span>
           <a href="#" className="cart-link">
-            <span className="cart-icon">🛒</span>
+            <span className="cart-icon" data-quantity={getTotalQuantify()}>
+              🛒
+            </span>
           </a>
         </div>
-        <CartDropDown cartVisible={cartVisible} closeCart={closeCart} />
+        <CartDropDown
+          cart={cart}
+          setCart={setCart}
+          cartVisible={cartVisible}
+          closeCart={closeCart}
+          getTotalPrice={getTotalPrice}
+        />
         <div className="account">
           <Link to="/login" className="account-link">
             <span className="account-icon">👤</span>

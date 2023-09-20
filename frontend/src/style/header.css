@@ -65,7 +65,7 @@ body {
   position: relative;
 }
 .cart-icon::before {
-  content: "0";
+  content: attr(data-quantity);
   font-size: 14px;
   position: absolute;
   top: -5px;

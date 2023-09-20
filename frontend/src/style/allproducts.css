@@ -192,6 +192,7 @@ select:focus {
   background-color: #4caf50;
   border: none;
   height: 20px;
+  cursor: pointer;
 }
 
 .product-list {

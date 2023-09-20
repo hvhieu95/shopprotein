@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../style/allproducts.css";
 import ProductsData from "../data/MOCK_DATA.json";
 
-export function AllProducts() {
+export function AllProducts({cart,setCart}) {
   // Khởi tạo dữ liệu sản phẩm từ file MOCK_DATA.json
   const products = ProductsData;
 
@@ -29,11 +29,12 @@ export function AllProducts() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
-  
+
+
   // Hàm chuyển đổi giá từ chuỗi sang số
   const parsePrice = (price) => parseFloat(price.replace(/[^0-9.]/g, ""));
 
-// Hàm sắp xếp sản phẩm
+  // Hàm sắp xếp sản phẩm
   const getSortedProducts = () => {
     let sorted = [...products];
     switch (sortOption) {
@@ -90,64 +91,70 @@ export function AllProducts() {
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   };
-// Các hàm xử lý sự kiện
-const handleMinPriceChange = (e) => setMinPrice(e.target.value);
-const handleMaxPriceChange = (e) => setMaxPrice(e.target.value);
-const applyPriceChange = () => setSelectedPriceRange([`${minPrice}-${maxPrice}`]);
-const handleSearchChange = (e) => setSearchTerm(e.target.value);
-const handleSortChange = (e) => setSortOption(e.target.value);
+  // Các hàm xử lý sự kiện
+  const handleMinPriceChange = (e) => setMinPrice(e.target.value);
+  const handleMaxPriceChange = (e) => setMaxPrice(e.target.value);
+  const applyPriceChange = () =>
+    setSelectedPriceRange([`${minPrice}-${maxPrice}`]);
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
+  const handleSortChange = (e) => setSortOption(e.target.value);
 
-const handlePriceChange = (e) => {
-  const { value, checked } = e.target;
-  setSelectedPriceRange((prevRanges) =>
-    checked ? [...prevRanges, value] : prevRanges.filter((range) => range !== value)
+  const handlePriceChange = (e) => {
+    const { value, checked } = e.target;
+    setSelectedPriceRange((prevRanges) =>
+      checked
+        ? [...prevRanges, value]
+        : prevRanges.filter((range) => range !== value)
+    );
+  };
+
+  const handleCategoryChange = (e) => {
+    const { value, checked } = e.target;
+    setSelectedCategories((prevCategories) =>
+      checked
+        ? [...prevCategories, value]
+        : prevCategories.filter((category) => category !== value)
+    );
+  };
+
+  const displayedProducts = getCurrentProducts();
+  // Tính toán số trang
+
+  const pageNumbers = Array.from(
+    { length: Math.ceil(getFilteredProducts().length / productsPerPage) },
+    (_, i) => i + 1
   );
-};
 
-const handleCategoryChange = (e) => {
-  const { value, checked } = e.target;
-  setSelectedCategories((prevCategories) =>
-    checked ? [...prevCategories, value] : prevCategories.filter((category) => category !== value)
-  );
-};
+  const nextPage = () => {
+    if (currentPage < pageNumbers.length) setCurrentPage(currentPage + 1);
+  };
 
-const displayedProducts = getCurrentProducts();
-// Tính toán số trang
-
-const pageNumbers = Array.from({ length: Math.ceil(getFilteredProducts().length / productsPerPage) }, (_, i) => i + 1);
-
-const nextPage = () => {
-  if (currentPage < pageNumbers.length) setCurrentPage(currentPage + 1);
-};
-
-const prevPage = () => {
-  if (currentPage > 1) setCurrentPage(currentPage - 1);
-};
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
 
 
-  // hàm xử lý khi người dùng thay đổi giá tối đa
-  
-  // hàm xử lý bộ lọc giá
- 
+// hàm  thêm sản phẩm vào giỏ hàng
 
-  
-// Hàm xử lý khi người dùng nhập vào ô tìm kiếm
+const addToCart=(product)=>{
+  setCart((prevCart)=>{
+    // kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    const existingProduct=prevCart.find((item)=>item.id===product.id)
+    if (existingProduct){
+      // nếu có, tăng số lượng sản phẩm đó lên 1
+      return prevCart.map((item)=>
+      item.id===product.id
+      ? {...item,quantity:item.quantity+1}
+      :item
+      )
+    }else{
+      return [...prevCart,{...product,quantity:1}]
+    }
+  })
+}
 
 
-
-  // Hàm xử lý khi người dùng thay đổi khoảng giá sản phẩm
-
-
-  // Hàm xử lý khi người dùng thay đổi danh mục sản phẩm
-
- 
-
- 
-
-  // Hàm xử lý khi người dùng thay đổi cách sắp xếp sản phẩm
-  
- 
 
 
   return (
@@ -305,42 +312,41 @@ const prevPage = () => {
         </div>
 
         <div className={`product-container ${viewMode}`}>
-  {displayedProducts.length > 0 ? (
-    displayedProducts.map((product) => {
-      // Kiểm tra xem sản phẩm có nằm trong danh sách sau khi đã lọc hay không
-      if (!getFilteredProducts().includes(product)) return null;
+          {displayedProducts.length > 0 ? (
+            displayedProducts.map((product) => {
+              // Kiểm tra xem sản phẩm có nằm trong danh sách sau khi đã lọc hay không
+              if (!getFilteredProducts().includes(product)) return null;
 
-      // Render sản phẩm dưới dạng grid
-      if (viewMode === "grid") {
-        return (
-          <div key={product.id} className="product-grid">
-            <img src={product.image} alt={product.name} />
-            <h3>{product.name}</h3>
-            <span className="product-price">{product.price}</span>
-            <div className="product-rating">{product.rating}</div>
-            <button>Add to Cart</button>
-          </div>
-        );
-      }
+              // Render sản phẩm dưới dạng grid
+              if (viewMode === "grid") {
+                return (
+                  <div key={product.id} className="product-grid">
+                    <img src={product.image} alt={product.name} />
+                    <h3>{product.name}</h3>
+                    <span className="product-price">{product.price}</span>
+                    <div className="product-rating">{product.rating}</div>
+                    <button onClick={()=>addToCart(product)}>Add to Cart</button>
+                  </div>
+                );
+              }
 
-      // Render sản phẩm dưới dạng list
-      return (
-        <div key={product.id} className="product-list">
-          <img src={product.image} alt={product.name} />
-          <div className="product-info">
-            <h3>{product.name}</h3>
-            <span className="product-price">{product.price}</span>
-            <div className="product-rating">{product.rating}</div>
-          </div>
-          <button>Add to Cart</button>
+              // Render sản phẩm dưới dạng list
+              return (
+                <div key={product.id} className="product-list">
+                  <img src={product.image} alt={product.name} />
+                  <div className="product-info">
+                    <h3>{product.name}</h3>
+                    <span className="product-price">{product.price}</span>
+                    <div className="product-rating">{product.rating}</div>
+                  </div>
+                  <button onClick={()=>addToCart(product)}>Add to Cart</button>
+                </div>
+              );
+            })
+          ) : (
+            <p>No products found based on the selected criteria.</p>
+          )}
         </div>
-      );
-    })
-  ) : (
-    <p>No products found based on the selected criteria.</p>
-  )}
-</div>
-
 
         <div className="pagination">
           <button onClick={prevPage}>&lt;</button>
